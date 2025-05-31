@@ -9,42 +9,34 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Window.Resources>
-        <!-- 按钮样式：模拟原生标题栏按钮 -->
         <Style x:Key="TitleBarButtonStyle" TargetType="Button">
-            <Setter Property="Width" Value="46" />
-            <Setter Property="Height" Value="32" />
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="BorderThickness" Value="0" />
-            <Setter Property="Foreground" Value="Black" /> 
-            <Setter Property="FontSize" Value="12" />
-            <Setter Property="Margin" Value="2,0" />
+            <Setter Property="Width" Value="46"/>
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Margin" Value="2,0"/>
             <Style.Triggers>
-                <!-- 悬停效果 -->
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#E5E5E5" />
+                    <Setter Property="Background" Value="#E5E5E5"/>
                 </Trigger>
-                <!-- 按下效果 -->
                 <Trigger Property="IsPressed" Value="True">
-                    <Setter Property="Background" Value="#C0C0C0" />
+                    <Setter Property="Background" Value="#C0C0C0"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
     </Window.Resources>
     <Grid>
-        <Border Background="Yellow" MouseLeftButtonDown="Border_MouseLeftButtonDown" Height="32"
-                VerticalAlignment="Top">
+        <Border Background="Yellow" MouseLeftButtonDown="Border_MouseLeftButtonDown" Height="32" VerticalAlignment="Top">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button x:Name="MinButton" Content="🗕" Style="{StaticResource TitleBarButtonStyle}"
-                        Click="MinButton_Click" />
-                <Button x:Name="MaxButton" Content="🗖" Style="{StaticResource TitleBarButtonStyle}"
-                        Click="MaxButton_Click" />
-                <Button x:Name="CloseButton" Content="🗙" Style="{StaticResource TitleBarButtonStyle}"
-                        Click="CloseButton_Click" />
+                <Button x:Name="MinButton" Content="🗕" Style="{StaticResource TitleBarButtonStyle}" Click="MinButton_Click"/>
+                <Button x:Name="MaxButton" Content="🗖" Style="{StaticResource TitleBarButtonStyle}" Click="MaxButton_Click" />
+                <Button x:Name="CloseButton" Content="🗙" Style="{StaticResource TitleBarButtonStyle}" Click="CloseButton_Click"/>
             </StackPanel>
         </Border>
-        <!-- 主内容区域 -->
         <Grid Margin="0,32,0,0" Background="White">
-            <TextBlock Text="Main Content Area" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <TextBlock Text="Main Content Area" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </Grid>
     </Grid>
 </Window>
