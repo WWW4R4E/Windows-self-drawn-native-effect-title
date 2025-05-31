@@ -1,5 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
@@ -26,6 +27,8 @@ namespace WpfApp1
 
         // 窗口的消息源句柄
         private HwndSource _hwndSource;
+        private bool _isMaxButtonHovered = false; // 新增
+
 
         // 构造函数
         public MainWindow()
@@ -65,6 +68,7 @@ namespace WpfApp1
             }
         }
 
+
         // 消息钩子函数，处理 Windows 消息
         private IntPtr HwndSourceHook(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
@@ -72,13 +76,19 @@ namespace WpfApp1
             {
                 // 处理非客户区命中测试消息
                 case WM_NCHITTEST:
+
                     // 获取鼠标相对于窗口的 WPF 坐标
                     var hitPoint = GetWpfMousePosition();
-                    // 检查鼠标是否在最小化按钮上
-                    if (IsOverButton(MinButton, hitPoint))
+                    bool isOverMaxButton = IsOverButton(MaxButton, hitPoint);
+                    if (isOverMaxButton && !_isMaxButtonHovered)
                     {
-                        handled = true; // 标记消息已处理
-                        return new IntPtr(HTMINBUTTON); // 返回最小化按钮区域代码
+                        _isMaxButtonHovered = true;
+                        MaxButton.Background = new SolidColorBrush(Color.FromRgb(0xBE, 0xE6, 0xFD));
+                    }
+                    else if (!isOverMaxButton && _isMaxButtonHovered)
+                    {
+                        _isMaxButtonHovered = false;
+                        MaxButton.Background = Brushes.Transparent;
                     }
 
                     // 检查鼠标是否在最大化/还原按钮上
@@ -86,13 +96,6 @@ namespace WpfApp1
                     {
                         handled = true; // 标记消息已处理，确保触发 Snap Layouts
                         return new IntPtr(HTMAXBUTTON); // 返回最大化按钮区域代码
-                    }
-
-                    // 检查鼠标是否在关闭按钮上
-                    if (IsOverButton(CloseButton, hitPoint))
-                    {
-                        handled = true; // 标记消息已处理
-                        return new IntPtr(HTCLOSE); // 返回关闭按钮区域代码
                     }
 
                     break;
@@ -108,7 +111,9 @@ namespace WpfApp1
                     }
                     else if (hitTest == HTMAXBUTTON)
                     {
-                        // 允许系统处理 Snap Layouts 的选择，不直接最大化
+                        SendMessage(hwnd, WM_SYSCOMMAND,
+                            WindowState == WindowState.Maximized ? SC_RESTORE : SC_MAXIMIZE, 0);
+                        MaxButton.Background = Brushes.Transparent;
                         handled = false;
                     }
                     else if (hitTest == HTCLOSE)
@@ -119,32 +124,9 @@ namespace WpfApp1
                     }
 
                     break;
-
-                // 处理非客户区左键释放消息
-                case WM_NCLBUTTONUP:
-                    if (wParam.ToInt32() == HTMAXBUTTON)
-                    {
-                        // 如果未选择 Snap Layouts，执行最大化/还原
-                        if (!IsSnapLayoutSelected())
-                        {
-                            SendMessage(hwnd, WM_SYSCOMMAND,
-                                WindowState == WindowState.Maximized ? SC_RESTORE : SC_MAXIMIZE, 0);
-                        }
-
-                        handled = false; // 允许系统继续处理
-                    }
-
-                    break;
             }
 
-            return IntPtr.Zero; // 默认返回值，表示未处理或处理完成
-        }
-
-        // 检查是否选择了 Snap Layouts 布局
-        private bool IsSnapLayoutSelected()
-        {
-            // 简单判断：如果窗口状态不是正常或最大化，假设选择了 Snap Layouts
-            return WindowState != WindowState.Normal && WindowState != WindowState.Maximized;
+            return IntPtr.Zero;
         }
 
         // 获取鼠标相对于窗口的 WPF 坐标

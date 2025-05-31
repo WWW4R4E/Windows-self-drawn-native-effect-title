@@ -17,18 +17,10 @@
             <Setter Property="Foreground" Value="Black"/>
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="Margin" Value="2,0"/>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#E5E5E5"/>
-                </Trigger>
-                <Trigger Property="IsPressed" Value="True">
-                    <Setter Property="Background" Value="#C0C0C0"/>
-                </Trigger>
-            </Style.Triggers>
         </Style>
     </Window.Resources>
     <Grid>
-        <Border Background="Yellow" MouseLeftButtonDown="Border_MouseLeftButtonDown" Height="32" VerticalAlignment="Top">
+        <Border Background="#ebebeb" MouseLeftButtonDown="Border_MouseLeftButtonDown" Height="32" VerticalAlignment="Top">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button x:Name="MinButton" Content="🗕" Style="{StaticResource TitleBarButtonStyle}" Click="MinButton_Click"/>
                 <Button x:Name="MaxButton" Content="🗖" Style="{StaticResource TitleBarButtonStyle}" Click="MaxButton_Click" />
