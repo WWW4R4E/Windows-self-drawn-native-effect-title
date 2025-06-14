@@ -136,8 +136,8 @@ bool Win32Window::Create(const std::wstring& title,
 
   // 1.修改窗口样式为无边框
   HWND window = CreateWindow(
-	window_class, title.c_str(), WS_POPUP | WS_THICKFRAME | WS_SYSMENU,
-      Scale(origin.x, scale_factor), Scale(origin.y, scale_factor),
+	window_class, title.c_str(), WS_POPUP | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_SYSMENU ,
+      Scale(origin.x+80, scale_factor), Scale(origin.y+80, scale_factor),
       Scale(size.width, scale_factor), Scale(size.height, scale_factor),
       nullptr, nullptr, GetModuleHandle(nullptr), this);
 
@@ -180,6 +180,15 @@ Win32Window::MessageHandler(HWND hwnd,
                             WPARAM const wparam,
                             LPARAM const lparam) noexcept {
   switch (message) {
+
+	// 扩展内容到标题栏
+	case WM_NCCALCSIZE: {
+		if (wparam == TRUE) {
+			// 返回 0 会告诉 Windows，客户区将占据整个窗口
+		  return 0;
+		}
+		break; 
+	  }
     case WM_DESTROY:
       window_handle_ = nullptr;
       Destroy();
